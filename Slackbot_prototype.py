@@ -35,6 +35,7 @@ def print_message(**payload):
                 thread_ts=thread
             ) 
             
+        # TO DO: 
         # Status of the current job. 
         # Completed? Registers that the most recent job was finished
         # Backend : alert the user when its turn to print.
@@ -42,10 +43,9 @@ def print_message(**payload):
         # Snapshot. Sends a picture of the current print as a reply 
         # Stream? Pulls up live stream of the print as a reply.
 
-        # TO DO: 
         return
     except:
         return
 
-rtm_client = RTMClient(token='xoxb-892027031253-892068907621-7gdRvcMM2X8VEKIcuqYui7GS')
+rtm_client = RTMClient(token='ELI2_SLACK_TOKEN')
 rtm_client.start()
