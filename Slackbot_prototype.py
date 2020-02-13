@@ -116,6 +116,6 @@ def print_message(**payload):
     except:
         return
 
-printer_client = OctoRest(url="http://localhost:5000", apikey="A049952F6D8C44FB808DB919030C4800")
-rtm_client = RTMClient(token='xoxb-13499733015-815731047863-uHe7WXbs1BBeKEZKZTrfXiOP')
+printer_client = OctoRest(url="http://localhost:5000", apikey="")
+rtm_client = RTMClient(token='')
 rtm_client.start()
