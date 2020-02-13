@@ -1,6 +1,7 @@
 from slack import RTMClient
-from time import sleep
-import re
+from octorest import OctoRest
+import wget
+
 # Driver methods for each command.
 # Proper usage instructions
 def helpMe(client, c_e, txt, t_ts):
@@ -98,6 +99,15 @@ def print_message(**payload):
 
                 # url_private_download
                 print(file_info[0]['url_private_download'])
+                url = file_info[0]['url_private_download']
+
+                file = wget.download(url, out="/home/pi/OctoPrint/venv/bin/uploads")
+                print(file)
+                print(printer_client)
+                try:
+                    printer_client.upload(file)
+                except:
+                    return
             except:
                 return
 
@@ -106,5 +116,6 @@ def print_message(**payload):
     except:
         return
 
-rtm_client = RTMClient(token='')
+printer_client = OctoRest(url="http://localhost:5000", apikey="A049952F6D8C44FB808DB919030C4800")
+rtm_client = RTMClient(token='xoxb-13499733015-815731047863-uHe7WXbs1BBeKEZKZTrfXiOP')
 rtm_client.start()
