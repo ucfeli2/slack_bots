@@ -1,6 +1,6 @@
 from slack import RTMClient
 from time import sleep
-
+import re
 # Driver methods for each command.
 # Proper usage instructions
 def helpMe(client, c_e, txt, t_ts):
@@ -81,17 +81,30 @@ def print_message(**payload):
             try:
                 # file_info[0] accesses the first and assumed only file per upload.
                 file_info = data['files']
-                if (file_info[0]['filetype'] != 'java'):
-                    # Error message saying this ain't g. code.
+                # print(file_info)
+
+                filename = file_info[0]['title']
+                # test.java
+                words = filename.split(".")
+                print("Words = {}".format(words))
+                extension = words[-1]
+                print("Extension = {}".format(extension))
+                # DEBUG:
+
+                if extension != 'gcode':
+                    # Prints a message to channel saying the file isnt gcode.
+                    print("Nah, chief. You can't do that. That ain't a gcode. ¯\_(ツ)_/")
                     return
+
+                # url_private_download
+                print(file_info[0]['url_private_download'])
             except:
                 return
 
             print("Uploaded file {}".format(file_info[0]['filetype']))
 
-        return
     except:
         return
 
-rtm_client = RTMClient(token='xoxb-13499733015-815731047863-uWRqOVvEgxzEaYIOIQ239qxe')
+rtm_client = RTMClient(token='')
 rtm_client.start()
