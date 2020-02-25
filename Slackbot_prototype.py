@@ -52,7 +52,7 @@ def print_message(**payload):
         # Debug information
         # print(data)
 
-        # print(data['user'])
+        # pr int(data['user'])
         # print(data['text'])
         # print(data['channel'])
 
@@ -71,6 +71,11 @@ def print_message(**payload):
             )
             # prompt = "WIP: Proper usage:"
             # helpMe(client, channel_event, prompt, thread)
+
+        if command == "!start":
+            print("Inside of start command")
+            print(printer_client)
+            printer_client.start(location="/home/pi/OctoPrint/venv/bin/uploads", filename="small_boat.gcode")
 
         # Status / number of jobs queued.
         if command == '!status':
@@ -99,7 +104,7 @@ def print_message(**payload):
 
                 # url_private_download
                 print(file_info[0]['url_private_download'])
-                url = file_info[0]['url_private_download']
+                url = file_info[0]['url_public_download']
 
                 file = wget.download(url, out="/home/pi/OctoPrint/venv/bin/uploads")
                 print(file)
@@ -116,6 +121,6 @@ def print_message(**payload):
     except:
         return
 
-printer_client = OctoRest(url="http://localhost:5000", apikey="A049952F6D8C44FB808DB919030C4800")
-rtm_client = RTMClient(token='xoxb-13499733015-815731047863-uHe7WXbs1BBeKEZKZTrfXiOP')
+printer_client = OctoRest(url="", apikey="API_KEY")
+rtm_client = RTMClient(token='TOKEN')
 rtm_client.start()
