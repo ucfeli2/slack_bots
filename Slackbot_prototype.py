@@ -1,5 +1,7 @@
 from slack import RTMClient
 from octorest import OctoRest
+import requests
+import os
 import wget
 
 # Driver methods for each command.
@@ -72,10 +74,15 @@ def print_message(**payload):
             # prompt = "WIP: Proper usage:"
             # helpMe(client, channel_event, prompt, thread)
 
+        # For debugging purposes.
+        if command == "!setup":
+            print("Selecting file for printing")
+            printer_client.printer()
+
+        # For debugging purposes.
         if command == "!start":
-            print("Inside of start command")
-            print(printer_client)
-            printer_client.start(location="/home/pi/OctoPrint/venv/bin/uploads", filename="small_boat.gcode")
+            print("Starting print:")
+            printer_client.start()
 
         # Status / number of jobs queued.
         if command == '!status':
@@ -95,22 +102,24 @@ def print_message(**payload):
                 print("Words = {}".format(words))
                 extension = words[-1]
                 print("Extension = {}".format(extension))
-                # DEBUG:
 
                 if extension != 'gcode':
                     # Prints a message to channel saying the file isnt gcode.
                     print("Nah, chief. You can't do that. That ain't a gcode. ¯\_(ツ)_/")
                     return
 
-                # url_private_download
-                print(file_info[0]['url_private_download'])
-                url = file_info[0]['url_public_download']
+                print(file_info[0])
+                file_name = file_info[0]['title']
+                url = file_info[0]['url_private_download']
 
-                file = wget.download(url, out="/home/pi/OctoPrint/venv/bin/uploads")
-                print(file)
+                os.system("wget -d -O " + file_name + " --header='Authorization: Bearer TOKEN' "  + url)
+                os.system("mv  " + str(file_name) + " ../uploads")
+
                 print(printer_client)
+                dir(printer_client)
                 try:
-                    printer_client.upload(file)
+                    printer_client.upload("../uploads/" + file_name)
+                    printer_client.select(file_name)
                 except:
                     return
             except:
@@ -121,6 +130,6 @@ def print_message(**payload):
     except:
         return
 
-printer_client = OctoRest(url="", apikey="API_KEY")
+printer_client = OctoRest(url="http://localhost:5000", apikey="API_KEY")
 rtm_client = RTMClient(token='TOKEN')
 rtm_client.start()
